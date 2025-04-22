@@ -14,7 +14,7 @@
             <img src="https://mystickermania.com/cdn/stickers/anime/rimuru-tempest-exclamation-512x512.png" alt="Gamer Logo" 
                 class="w-40 h-40 shadow-md hover:shadow-lg transition duration-300">
         </div>
-        <h1 class="text-3xl font-bold text-center text-blue-400 hover:text-blue-300 transition duration-300">Welcome Back, Gamer!</h1>
+        <h1 class="text-3xl font-bold text-center text-blue-400 hover:text-blue-300 transition duration-300">Hi, Welcome Back!</h1>
         <form action="/login" method="POST" class="space-y-4">
             @csrf
             <div>
