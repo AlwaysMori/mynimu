@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
-<body class="bg-gray-900 text-white min-h-screen fade-in">
+<body class="bg-gray-900 text-white min-h-screen fade-in" style="font-family: 'Poppins', sans-serif;">
     <x-header :title="'Dashboard'" class="custom-header" />
     <br>
     <div class="container mx-auto px-4">
@@ -55,13 +56,13 @@
 
                 recommendations.forEach(anime => {
                     const animeCard = document.createElement('div');
-                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
                     animeCard.innerHTML = `
-                        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
+                        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded-none">
                         <div class="flex-1">
                             <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                             <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
-                            <button class="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                            <button class="mt-4 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
                                 Add to Wishlist
                             </button>
                         </div>

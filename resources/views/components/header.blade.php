@@ -1,4 +1,4 @@
-<header class="bg-gray-800 text-white border-b-2 border-blue-700 shadow-md">
+<header class="bg-gray-800 text-white border-b-2 border-blue-700 shadow-md" style="font-family: 'Poppins', sans-serif;">
     <div class="container mx-auto flex justify-between items-center p-4">
         <h1 class="text-xl font-bold">{{ $title ?? 'Default Title' }}</h1>
         <button id="menu-toggle" class="block md:hidden text-white focus:outline-none">
