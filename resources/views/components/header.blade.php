@@ -1,4 +1,4 @@
-<header class="bg-gray-800 text-white shadow-md">
+<header class="bg-gray-800 text-white border-b-2 border-blue-700 shadow-md">
     <div class="container mx-auto flex justify-between items-center p-4">
         <h1 class="text-xl font-bold">{{ $title ?? 'Default Title' }}</h1>
         <button id="menu-toggle" class="block md:hidden text-white focus:outline-none">
@@ -10,6 +10,12 @@
             <a href="/" class="hover:text-blue-400 transition">Home</a>
             <a href="/about" class="hover:text-blue-400 transition">About</a>
             <a href="/contact" class="hover:text-blue-400 transition">Contact</a>
+            <form action="{{ route('logout') }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="hover:text-blue-400 transition">
+                    Logout
+                </button>
+            </form>
         </nav>
     </div>
     <script>
