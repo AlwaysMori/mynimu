@@ -31,10 +31,10 @@
             </form>
         </div>
     </div>
-    <div id="recommended-anime" class="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 container mx-auto px-4">
+    <div id="recommended-anime" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto px-4">
         <!-- Rekomendasi anime akan ditampilkan di sini -->
     </div>
-    <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 container mx-auto px-4">
+    <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto px-4">
         <!-- Hasil pencarian akan ditampilkan di sini -->
     </div>
     <script>
@@ -55,13 +55,16 @@
 
                 recommendations.forEach(anime => {
                     const animeCard = document.createElement('div');
-                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-4', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
                     animeCard.innerHTML = `
-                        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
-                        <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
-                        <button class="mt-2 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
-                            Add to Wishlist
-                        </button>
+                        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white">${anime.title}</h3>
+                            <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
+                            <button class="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                                Add to Wishlist
+                            </button>
+                        </div>
                     `;
                     recommendedContainer.appendChild(animeCard);
                 });
@@ -88,13 +91,16 @@
 
                     results.forEach(anime => {
                         const animeCard = document.createElement('div');
-                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-4', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition');
+                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
                         animeCard.innerHTML = `
-                            <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
-                            <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
-                            <button class="mt-2 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
-                                Add to Wishlist
-                            </button>
+                            <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-white">${anime.title}</h3>
+                                <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
+                                <button class="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                                    Add to Wishlist
+                                </button>
+                            </div>
                         `;
                         resultsContainer.appendChild(animeCard);
                     });
