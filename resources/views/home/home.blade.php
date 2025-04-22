@@ -32,17 +32,27 @@
             </form>
         </div>
     </div>
-    <div id="recommended-anime" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto px-4">
-        <!-- Rekomendasi anime akan ditampilkan di sini -->
+    <div id="recommended-section" class="container mx-auto px-4 mt-6">
+        <h2 class="text-2xl font-bold text-white mb-2">Recommended</h2>
+        <hr class="border-t-2 border-gray-600 mb-4">
+        <div id="recommended-anime" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rekomendasi anime akan ditampilkan di sini -->
+        </div>
     </div>
-    <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto px-4">
-        <!-- Hasil pencarian akan ditampilkan di sini -->
+    <div id="search-section" class="container mx-auto px-4 mt-8 hidden">
+        <h2 class="text-2xl font-bold text-white mb-2">Search Results</h2>
+        <hr class="border-t-2 border-gray-600 mb-4">
+        <div id="search-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Hasil pencarian akan ditampilkan di sini -->
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const searchButton = document.getElementById('anime-search-button');
             const searchInput = document.getElementById('anime-search-input');
             const resultsContainer = document.getElementById('search-results');
+            const recommendedSection = document.getElementById('recommended-section');
+            const searchSection = document.getElementById('search-section');
             const recommendedContainer = document.getElementById('recommended-anime');
 
             // Fetch rekomendasi anime secara acak saat halaman dimuat
@@ -56,7 +66,7 @@
 
                 recommendations.forEach(anime => {
                     const animeCard = document.createElement('div');
-                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'border','border-blue-800','p-6', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
                     animeCard.innerHTML = `
                         <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded-none">
                         <div class="flex-1">
@@ -92,19 +102,23 @@
 
                     results.forEach(anime => {
                         const animeCard = document.createElement('div');
-                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
+                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border','border-blue-800', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
                         animeCard.innerHTML = `
                             <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
                             <div class="flex-1">
                                 <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                                 <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
-                                <button class="mt-4 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                                <button class="mt-4 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
                                     Add to Wishlist
                                 </button>
                             </div>
                         `;
                         resultsContainer.appendChild(animeCard);
                     });
+
+                    // Sembunyikan rekomendasi dan tampilkan hasil pencarian
+                    recommendedSection.classList.add('hidden');
+                    searchSection.classList.remove('hidden');
                 } catch (error) {
                     console.error(error);
                     alert('An error occurred while fetching search results.');
