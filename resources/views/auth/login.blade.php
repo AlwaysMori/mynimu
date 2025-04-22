@@ -18,17 +18,17 @@
         <form action="/login" method="POST" class="space-y-4">
             @csrf
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                <label for="username" class="block text-sm font-medium text-gray-300 ">Username</label>
                 <input type="text" id="username" name="username" required 
-                    class="w-full px-4 py-2 mt-1 text-gray-900 bg-gray-200 photo-card rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-400 transition duration-300">
+                    class="w-full px-4 py-2 mt-1 text-gray-900 bg-gray-200 photo-card solid-shadow rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-400 transition duration-300 border border-gray-300">
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
                 <input type="password" id="password" name="password" required 
-                    class="w-full px-4 py-2 mt-1 text-gray-900 bg-gray-200 photo-card rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-400 transition duration-300">
+                    class="w-full px-4 py-2 mt-1 text-gray-900 bg-gray-200 photo-card solid-shadow rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-400 transition duration-300 border border-gray-300">
             </div>
             <button type="submit" 
-                class="w-full px-4 py-2 font-bold text-white bg-blue-600 photo-card rounded-none hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                class="w-full px-4 py-2 font-bold text-white bg-blue-600 photo-card solid-shadow rounded-none hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 border border-gray-300">
                 Login
             </button>
         </form>
