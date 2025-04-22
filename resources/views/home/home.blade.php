@@ -46,6 +46,12 @@
             <!-- Hasil pencarian akan ditampilkan di sini -->
         </div>
     </div>
+
+    <!-- Notifikasi Pop-Up -->
+    <div id="notification-popup" class="">
+        Anime added to wishlist!
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const searchButton = document.getElementById('anime-search-button');
@@ -54,6 +60,7 @@
             const recommendedSection = document.getElementById('recommended-section');
             const searchSection = document.getElementById('search-section');
             const recommendedContainer = document.getElementById('recommended-anime');
+            const notificationPopup = document.getElementById('notification-popup');
 
             // Fetch rekomendasi anime secara acak saat halaman dimuat
             try {
@@ -66,16 +73,16 @@
 
                 recommendations.forEach(anime => {
                     const animeCard = document.createElement('div');
-                    animeCard.classList.add('photo-card', 'bg-gray-800', 'border','border-blue-800','p-6', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'border', 'border-blue-800', 'p-6', 'fade-in', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
                     animeCard.innerHTML = `
                         <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded-none">
-                        <div class="flex-1">
+                        <div class="flex-1 pl-4">
                             <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                             <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
-                            <button class="mt-4 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
-                                Add to Wishlist
-                            </button>
                         </div>
+                        <button class="mt-4 p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                            <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                        </button>
                     `;
                     recommendedContainer.appendChild(animeCard);
                 });
@@ -102,16 +109,16 @@
 
                     results.forEach(anime => {
                         const animeCard = document.createElement('div');
-                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border','border-blue-800', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'items-center', 'space-x-6');
+                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
                         animeCard.innerHTML = `
                             <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
-                            <div class="flex-1">
+                            <div class="flex-1 pl-4">
                                 <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                                 <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
-                                <button class="mt-4 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
-                                    Add to Wishlist
-                                </button>
                             </div>
+                            <button class="mt-4 p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                                <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                            </button>
                         `;
                         resultsContainer.appendChild(animeCard);
                     });
@@ -124,30 +131,53 @@
                     alert('An error occurred while fetching search results.');
                 }
             });
-        });
 
-        async function addBookmark(animeId, title, imageUrl) {
-            try {
-                const response = await fetch('/anime/bookmark', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: JSON.stringify({ anime_id: animeId, title: title, image_url: imageUrl }),
-                });
+            document.addEventListener('click', async (event) => {
+                if (event.target.closest('.wishlist-button')) {
+                    const button = event.target.closest('.wishlist-button');
+                    const animeId = button.getAttribute('data-anime-id');
+                    const title = button.getAttribute('data-title');
+                    const imageUrl = button.getAttribute('data-image-url');
+                    const loveIcon = button.querySelector('.love-icon');
+                    const isWishlisted = loveIcon.classList.contains('wishlisted');
 
-                if (!response.ok) {
-                    throw new Error('Failed to add bookmark');
+                    try {
+                        if (isWishlisted) {
+                            // Remove from wishlist (optional: implement backend logic)
+                            loveIcon.classList.remove('wishlisted');
+                            loveIcon.src = "https://img.icons8.com/?size=100&id=25157&format=png&color=40C057";
+                        } else {
+                            // Add to wishlist
+                            const response = await fetch('/anime/bookmark', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                                body: JSON.stringify({ anime_id: animeId, title: title, image_url: imageUrl }),
+                            });
+
+                            if (!response.ok) {
+                                throw new Error('Failed to add to wishlist');
+                            }
+
+                            loveIcon.classList.add('wishlisted');
+                            loveIcon.src = "https://img.icons8.com/?size=100&id=26083&format=png&color=40C057"; // Change to green icon
+
+                            // Tampilkan notifikasi dengan efek fade-in dan fade-out
+                            notificationPopup.textContent = `${title} added to bookmarks!`;
+                            notificationPopup.classList.add('show');
+                            setTimeout(() => {
+                                notificationPopup.classList.remove('show');
+                            }, 3000); // Sembunyikan setelah 3 detik
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('An error occurred while updating the wishlist.');
+                    }
                 }
-
-                const result = await response.json();
-                alert(result.message);
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while adding the bookmark.');
-            }
-        }
+            });
+        });
     </script>
 </body>
 </html>
