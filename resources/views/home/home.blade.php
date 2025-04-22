@@ -46,6 +46,13 @@
             <!-- Hasil pencarian akan ditampilkan di sini -->
         </div>
     </div>
+    <div id="user-bookmarks-section" class="container mx-auto px-4 mt-8">
+        <h2 class="text-2xl font-bold text-white mb-2">Your Bookmarks</h2>
+        <hr class="border-t-2 border-gray-600 mb-4">
+        <div id="user-bookmarks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Bookmark user akan ditampilkan di sini -->
+        </div>
+    </div>
 
     <!-- Notifikasi Pop-Up -->
     <div id="notification-popup" class="">
@@ -61,6 +68,7 @@
             const searchSection = document.getElementById('search-section');
             const recommendedContainer = document.getElementById('recommended-anime');
             const notificationPopup = document.getElementById('notification-popup');
+            const bookmarksContainer = document.getElementById('user-bookmarks');
 
             // Fetch rekomendasi anime secara acak saat halaman dimuat
             try {
@@ -187,6 +195,32 @@
                     }
                 }
             });
+
+            // Fetch user bookmarks
+            try {
+                const response = await fetch('/anime/bookmarks');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user bookmarks.');
+                }
+
+                const { bookmarks } = await response.json();
+
+                bookmarks.forEach(bookmark => {
+                    const bookmarkCard = document.createElement('div');
+                    bookmarkCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
+                    bookmarkCard.innerHTML = `
+                        <img src="${bookmark.image_url}" alt="${bookmark.title}" class="w-32 h-32 object-cover rounded">
+                        <div class="flex-1 pl-4">
+                            <h3 class="text-xl font-bold text-white">${bookmark.title}</h3>
+                            <p class="text-sm text-gray-400 mt-2">Status: ${bookmark.status}</p>
+                        </div>
+                    `;
+                    bookmarksContainer.appendChild(bookmarkCard);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while fetching your bookmarks.');
+            }
         });
     </script>
 </body>

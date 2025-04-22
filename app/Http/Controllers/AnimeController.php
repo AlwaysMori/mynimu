@@ -78,4 +78,11 @@ class AnimeController extends Controller
             return response()->json(['error' => 'An error occurred while fetching random anime'], 500);
         }
     }
+
+    public function getUserBookmarks()
+    {
+        $bookmarks = AnimeBookmark::where('user_id', Auth::id())->get();
+
+        return response()->json(['bookmarks' => $bookmarks]);
+    }
 }

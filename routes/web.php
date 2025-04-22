@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home.home'); // Ensure this route points to the home view
     });
+
+    Route::get('/anime/bookmarks', [AnimeController::class, 'getUserBookmarks'])->name('anime.userBookmarks');
 });
 
 // Default route
