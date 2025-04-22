@@ -11,31 +11,31 @@
 <body class="bg-gray-900 text-white min-h-screen fade-in">
     <x-header :title="'Dashboard'" class="custom-header" />
     <br>
-    <div class="container mx-auto px-4 custom-container">
-        <form id="anime-search-form" class="flex items-center space-x-2 custom-search-form">
-            <input 
-                type="text" 
-                id="anime-search-input" 
-                name="query" 
-                placeholder="Search..." 
-                class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 custom-input"
-            />
-            <button 
-                type="button" 
-                id="anime-search-button" 
-                class="p-2 bg-blue-800 text-white rounded-none hover:bg-blue-900 photo-card solid-shadow transition custom-button"
-            >
-                Search
-            </button>
-        </form>
-        <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <!-- Hasil pencarian akan ditampilkan di sini -->
+    <div class="container mx-auto px-4">
+        <div class="flex justify-center">
+            <form id="anime-search-form" class="flex items-center space-x-2 w-full max-w-3xl custom-search-form">
+                <input 
+                    type="text" 
+                    id="anime-search-input" 
+                    name="query" 
+                    placeholder="Search..." 
+                    class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 custom-input"
+                />
+                <button 
+                    type="button" 
+                    id="anime-search-button" 
+                    class="p-2 bg-blue-800 text-white rounded hover:bg-blue-900 solid-shadow transition custom-button"
+                >
+                    Search
+                </button>
+            </form>
         </div>
+    </div>
+    <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 container mx-auto px-4">
+        <!-- Hasil pencarian akan ditampilkan di sini -->
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('fade-in');
-
             const searchButton = document.getElementById('anime-search-button');
             const searchInput = document.getElementById('anime-search-input');
             const resultsContainer = document.getElementById('search-results');
@@ -58,11 +58,11 @@
 
                     results.forEach(anime => {
                         const animeCard = document.createElement('div');
-                        animeCard.classList.add('bg-gray-800', 'p-4', 'rounded', 'shadow-md', 'hover:shadow-lg', 'transition');
+                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-4', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition');
                         animeCard.innerHTML = `
                             <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
                             <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
-                            <button class="mt-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                            <button class="mt-2 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
                                 Add to Wishlist
                             </button>
                         `;
