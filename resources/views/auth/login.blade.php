@@ -15,10 +15,10 @@
                 class="w-40 h-40 shadow-md hover:shadow-lg transition duration-300">
         </div>
         <h1 class="text-3xl font-bold text-center text-blue-400 hover:text-blue-300 transition duration-300">Hi, Welcome Back!</h1>
-        <form action="/login" method="POST" class="space-y-4">
+        <form action="{{ route('login') }}" method="POST" class="space-y-4">
             @csrf
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-300 ">Username</label>
+                <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
                 <input type="text" id="username" name="username" required 
                     class="w-full px-4 py-2 mt-1 text-gray-900 bg-gray-200 photo-card solid-shadow rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-400 transition duration-300 border border-gray-300">
             </div>
