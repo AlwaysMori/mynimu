@@ -12,10 +12,14 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 
-Route::get('/', function () {
-    return view('auth.login');
+// Protected routes (requires authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/home', function () {
+        return view('home.home'); // Ensure this route points to the home view
+    });
 });
 
-Route::get('/home', function () {
-    return view('home.home');
+// Default route
+Route::get('/', function () {
+    return redirect('/login');
 });
