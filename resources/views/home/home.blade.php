@@ -19,26 +19,56 @@
                     id="anime-search-input" 
                     name="query" 
                     placeholder="Search..." 
-                    class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 custom-input"
+                    class="w-full p-2 rounded-none border border-white bg-gray-700 text-white focus:outline-none photo-card solid-shadow focus:ring-2 focus:ring-blue-400 custom-input"
                 />
                 <button 
                     type="button" 
                     id="anime-search-button" 
-                    class="p-2 bg-blue-800 text-white rounded hover:bg-blue-900 solid-shadow transition custom-button"
+                    class="p-2 bg-blue-800 text-white border border-white rounded-none hover:bg-blue-900 photo-card solid-shadow transition custom-button"
                 >
                     Search
                 </button>
             </form>
         </div>
     </div>
+    <div id="recommended-anime" class="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 container mx-auto px-4">
+        <!-- Rekomendasi anime akan ditampilkan di sini -->
+    </div>
     <div id="search-results" class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 container mx-auto px-4">
         <!-- Hasil pencarian akan ditampilkan di sini -->
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const searchButton = document.getElementById('anime-search-button');
             const searchInput = document.getElementById('anime-search-input');
             const resultsContainer = document.getElementById('search-results');
+            const recommendedContainer = document.getElementById('recommended-anime');
+
+            // Fetch rekomendasi anime secara acak saat halaman dimuat
+            try {
+                const response = await fetch('/random-anime');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch random anime.');
+                }
+
+                const recommendations = await response.json();
+
+                recommendations.forEach(anime => {
+                    const animeCard = document.createElement('div');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'p-4', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition');
+                    animeCard.innerHTML = `
+                        <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
+                        <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
+                        <button class="mt-2 p-2 bg-blue-600 text-white rounded-none hover:bg-blue-700 solid-shadow transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                            Add to Wishlist
+                        </button>
+                    `;
+                    recommendedContainer.appendChild(animeCard);
+                });
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while fetching random anime.');
+            }
 
             searchButton.addEventListener('click', async () => {
                 const query = searchInput.value.trim();

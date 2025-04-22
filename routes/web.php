@@ -20,6 +20,9 @@ Route::get('/search-anime', [AnimeController::class, 'searchAnime'])->name('sear
 Route::post('/anime/bookmark', [AnimeController::class, 'addBookmark'])->name('anime.bookmark');
 Route::patch('/anime/bookmark/{id}', [AnimeController::class, 'updateBookmarkStatus'])->name('anime.updateBookmark');
 
+// Route for random anime recommendation
+Route::get('/random-anime', [AnimeController::class, 'getRandomAnime'])->name('random-anime');
+
 // Protected routes (requires authentication)
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {

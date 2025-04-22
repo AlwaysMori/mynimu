@@ -58,4 +58,24 @@ class AnimeController extends Controller
 
         return response()->json(['message' => 'Bookmark status updated successfully', 'bookmark' => $bookmark]);
     }
+
+    public function getRandomAnime()
+    {
+        try {
+            // Ambil data anime populer dari Jikan API
+            $response = Http::get('https://api.jikan.moe/v4/top/anime');
+            if ($response->failed()) {
+                return response()->json(['error' => 'Failed to fetch data from Jikan API'], 500);
+            }
+
+            $animeList = $response->json()['data'];
+
+            // Acak urutan anime dan ambil 8 anime secara acak
+            $randomAnime = collect($animeList)->shuffle()->take(8);
+
+            return response()->json($randomAnime);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching random anime'], 500);
+        }
+    }
 }
