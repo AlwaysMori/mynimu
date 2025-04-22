@@ -16,6 +16,10 @@ Route::post('/register', [RegisterController::class, 'register']);
 // Route for searching anime
 Route::get('/search-anime', [AnimeController::class, 'searchAnime'])->name('search-anime');
 
+// Route for managing anime bookmarks
+Route::post('/anime/bookmark', [AnimeController::class, 'addBookmark'])->name('anime.bookmark');
+Route::patch('/anime/bookmark/{id}', [AnimeController::class, 'updateBookmarkStatus'])->name('anime.updateBookmark');
+
 // Protected routes (requires authentication)
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {

@@ -12,15 +12,17 @@
     <x-header :title="'Dashboard'" class="custom-header" />
     <br>
     <div class="container mx-auto px-4 custom-container">
-        <form action="/search" method="GET" class="flex items-center space-x-2 custom-search-form">
+        <form id="anime-search-form" class="flex items-center space-x-2 custom-search-form">
             <input 
                 type="text" 
+                id="anime-search-input" 
                 name="query" 
                 placeholder="Search..." 
                 class="w-full p-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400 custom-input"
             />
             <button 
-                type="submit" 
+                type="button" 
+                id="anime-search-button" 
                 class="p-2 bg-blue-800 text-white rounded-none hover:bg-blue-900 photo-card solid-shadow transition custom-button"
             >
                 Search
@@ -34,23 +36,67 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('fade-in');
 
-            // Event listener untuk menampilkan hasil pencarian
-            document.addEventListener('animeSearchResults', (event) => {
-                const resultsContainer = document.getElementById('search-results');
-                resultsContainer.innerHTML = ''; // Bersihkan hasil sebelumnya
+            const searchButton = document.getElementById('anime-search-button');
+            const searchInput = document.getElementById('anime-search-input');
+            const resultsContainer = document.getElementById('search-results');
 
-                const results = event.detail;
-                results.forEach(anime => {
-                    const animeCard = document.createElement('div');
-                    animeCard.classList.add('bg-gray-800', 'p-4', 'rounded', 'shadow-md', 'hover:shadow-lg', 'transition');
-                    animeCard.innerHTML = `
-                        <img src="${anime.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
-                        <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
-                    `;
-                    resultsContainer.appendChild(animeCard);
-                });
+            searchButton.addEventListener('click', async () => {
+                const query = searchInput.value.trim();
+                if (!query) {
+                    alert('Please enter a search term.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/search-anime?query=${encodeURIComponent(query)}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch search results.');
+                    }
+
+                    const results = await response.json();
+                    resultsContainer.innerHTML = ''; // Bersihkan hasil sebelumnya
+
+                    results.forEach(anime => {
+                        const animeCard = document.createElement('div');
+                        animeCard.classList.add('bg-gray-800', 'p-4', 'rounded', 'shadow-md', 'hover:shadow-lg', 'transition');
+                        animeCard.innerHTML = `
+                            <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-full h-48 object-cover rounded">
+                            <h3 class="mt-2 text-lg font-bold">${anime.title}</h3>
+                            <button class="mt-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onclick="addBookmark('${anime.mal_id}', '${anime.title}', '${anime.images.jpg.image_url}')">
+                                Add to Wishlist
+                            </button>
+                        `;
+                        resultsContainer.appendChild(animeCard);
+                    });
+                } catch (error) {
+                    console.error(error);
+                    alert('An error occurred while fetching search results.');
+                }
             });
         });
+
+        async function addBookmark(animeId, title, imageUrl) {
+            try {
+                const response = await fetch('/anime/bookmark', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({ anime_id: animeId, title: title, image_url: imageUrl }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to add bookmark');
+                }
+
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while adding the bookmark.');
+            }
+        }
     </script>
 </body>
 </html>
