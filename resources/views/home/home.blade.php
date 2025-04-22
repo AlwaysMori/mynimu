@@ -78,11 +78,16 @@
                         <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded-none">
                         <div class="flex-1 pl-4">
                             <h3 class="text-xl font-bold text-white">${anime.title}</h3>
-                            <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
+                            <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
+                            <div class="mt-4 flex justify-between">
+                                <button class="p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                                    <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                                </button>
+                                <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
+                                    Details
+                                </button>
+                            </div>
                         </div>
-                        <button class="mt-4 p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
-                            <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
-                        </button>
                     `;
                     recommendedContainer.appendChild(animeCard);
                 });
@@ -114,11 +119,16 @@
                             <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
                             <div class="flex-1 pl-4">
                                 <h3 class="text-xl font-bold text-white">${anime.title}</h3>
-                                <p class="text-sm text-gray-400">Rating: ${anime.score ?? 'N/A'}</p>
+                                <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
+                                <div class="mt-4 flex justify-between">
+                                    <button class="p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                                        <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                                    </button>
+                                    <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
+                                        Details
+                                    </button>
+                                </div>
                             </div>
-                            <button class="mt-4 p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
-                                <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
-                            </button>
                         `;
                         resultsContainer.appendChild(animeCard);
                     });
