@@ -229,4 +229,5 @@
         });
     </script>
 </body>
+<x-footer-navbar />
 </html>

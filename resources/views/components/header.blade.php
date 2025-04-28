@@ -9,8 +9,9 @@
         </button>
         <nav id="menu" class="md:flex space-x-4 hidden">
             <a href="/" class="hover:text-blue-400 transition">Home</a>
-            <a href="/about" class="hover:text-blue-400 transition">About</a>
-            <a href="/contact" class="hover:text-blue-400 transition">Contact</a>
+            <a href="/forum" class="hover:text-blue-400 transition">Forum</a>
+            <a href="/anime" class="hover:text-blue-400 transition">Anime</a>
+            <a href="/profile" class="hover:text-blue-400 transition">Profile</a>
             <form action="{{ route('logout') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="hover:text-blue-400 transition">
