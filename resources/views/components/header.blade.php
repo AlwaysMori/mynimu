@@ -12,12 +12,16 @@
             <a href="/forum" class="hover:text-blue-400 transition">Forum</a>
             <a href="/anime" class="hover:text-blue-400 transition">Anime</a>
             <a href="/profile" class="hover:text-blue-400 transition">Profile</a>
+            @auth
             <form action="{{ route('logout') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="hover:text-blue-400 transition">
                     Logout
                 </button>
             </form>
+            @else
+            <a href="{{ route('login') }}" class="hover:text-blue-400 transition">Login</a>
+            @endauth
         </nav>
     </div>
     <script>

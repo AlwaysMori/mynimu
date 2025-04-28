@@ -34,7 +34,7 @@ class AnimeController extends Controller
         $user = auth()->user();
         $animeId = $request->input('anime_id');
 
-        // Periksa apakah anime sudah dibookmark
+        // Check if anime already bookmarked
         $existingBookmark = $user->animeBookmarks()->where('anime_id', $animeId)->first();
 
         if ($existingBookmark) {
@@ -44,12 +44,14 @@ class AnimeController extends Controller
             ], 200);
         }
 
-        // Simpan bookmark baru
+        // Save new bookmark
         $user->animeBookmarks()->create([
             'anime_id' => $animeId,
             'title' => $request->input('title'),
             'image_url' => $request->input('image_url'),
-            'status' => 'wishlist',
+            'status' => $request->input('status', 'wishlist'), // Default to wishlist if not provided
+            'is_favorite' => $request->input('is_favorite', false),
+            'is_finished' => $request->input('is_finished', false),
         ]);
 
         return response()->json([
@@ -105,17 +107,31 @@ class AnimeController extends Controller
         return response()->json(['isBookmarked' => $isBookmarked]);
     }
 
-    public function toggleFavorite(Request $request, $id)
+    public function toggleFavorite(Request $request, $id = null)
     {
-        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark = AnimeBookmark::firstOrCreate(
+            ['anime_id' => $request->input('anime_id'), 'user_id' => Auth::id()],
+            [
+                'title' => $request->input('title'),
+                'image_url' => $request->input('image_url'),
+            ]
+        );
+
         $bookmark->update(['is_favorite' => !$bookmark->is_favorite]);
 
         return response()->json(['message' => 'Favorite status toggled successfully', 'bookmark' => $bookmark]);
     }
 
-    public function toggleFinished(Request $request, $id)
+    public function toggleFinished(Request $request, $id = null)
     {
-        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark = AnimeBookmark::firstOrCreate(
+            ['anime_id' => $request->input('anime_id'), 'user_id' => Auth::id()],
+            [
+                'title' => $request->input('title'),
+                'image_url' => $request->input('image_url'),
+            ]
+        );
+
         $bookmark->update(['is_finished' => !$bookmark->is_finished]);
 
         return response()->json(['message' => 'Finished status toggled successfully', 'bookmark' => $bookmark]);
@@ -123,10 +139,15 @@ class AnimeController extends Controller
 
     public function deleteBookmark($id)
     {
-        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$bookmark) {
+            return response()->json(['message' => 'Bookmark not found.'], 404);
+        }
+
         $bookmark->delete();
 
-        return response()->json(['message' => 'Bookmark deleted successfully']);
+        return response()->json(['message' => 'Bookmark deleted successfully', 'status' => 'deleted']);
     }
 
     public function showDetail($id)

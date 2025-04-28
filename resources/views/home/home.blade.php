@@ -10,8 +10,13 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 <body class="bg-gray-900 text-white min-h-screen fade-in" style="font-family: 'Poppins', sans-serif;">
+    @auth
     <x-header :title="'Dashboard'" class="custom-header" />
+    @else
+    <x-header :title="'Welcome'" class="custom-header" />
+    @endauth
     <br>
+    <!-- Konten halaman -->
     <div class="container mx-auto px-4">
         <div class="flex justify-center">
             <form id="anime-search-form" class="flex items-center space-x-2 w-full max-w-3xl custom-search-form">
@@ -46,7 +51,7 @@
             <!-- Hasil pencarian akan ditampilkan di sini -->
         </div>
     </div>
-    <div id="user-bookmarks-section" class="container mx-auto px-4 mt-8">
+    <div id="user-bookmarks-section" class="container mx-auto px-4 mt-8 mb-20">
         <h2 class="text-2xl font-bold text-white mb-2">Your Bookmarks</h2>
         <hr class="border-t-2 border-gray-600 mb-4">
         <div id="user-bookmarks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

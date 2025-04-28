@@ -93,16 +93,18 @@
     <x-footer-navbar />
     <script>
         async function toggleFavorite(bookmarkId) {
-            if (!bookmarkId) {
-                alert('Bookmark not found.');
-                return;
-            }
             try {
-                const response = await fetch(`/anime/bookmark/${bookmarkId}/favorite`, {
+                const response = await fetch(`/anime/bookmark/${bookmarkId || 'null'}/favorite`, {
                     method: 'PATCH',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
                     },
+                    body: JSON.stringify({
+                        anime_id: '{{ $anime["mal_id"] }}',
+                        title: '{{ $anime["title"] }}',
+                        image_url: '{{ $anime["images"]["jpg"]["image_url"] }}',
+                    }),
                 });
                 const result = await response.json();
                 alert(result.message);
@@ -114,16 +116,18 @@
         }
 
         async function toggleFinished(bookmarkId) {
-            if (!bookmarkId) {
-                alert('Bookmark not found.');
-                return;
-            }
             try {
-                const response = await fetch(`/anime/bookmark/${bookmarkId}/finished`, {
+                const response = await fetch(`/anime/bookmark/${bookmarkId || 'null'}/finished`, {
                     method: 'PATCH',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
                     },
+                    body: JSON.stringify({
+                        anime_id: '{{ $anime["mal_id"] }}',
+                        title: '{{ $anime["title"] }}',
+                        image_url: '{{ $anime["images"]["jpg"]["image_url"] }}',
+                    }),
                 });
                 const result = await response.json();
                 alert(result.message);
@@ -150,7 +154,10 @@
                 });
                 const result = await response.json();
                 alert(result.message);
-                window.location.href = '/anime/bookmarks';
+
+                if (result.status === 'deleted') {
+                    location.reload();
+                }
             } catch (error) {
                 console.error(error);
                 alert('An error occurred while deleting the bookmark.');

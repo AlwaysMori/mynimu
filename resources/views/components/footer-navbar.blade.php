@@ -1,6 +1,6 @@
 <footer class="fixed bottom-0 left-0 w-full bg-gray-800 text-white border-t-2 border-blue-700 shadow-md md:hidden">
     <div class="container mx-auto flex justify-around items-center p-2">
-        <a href="/" class="flex flex-col items-center text-sm hover:text-blue-400 transition">
+        <a href="{{ auth()->check() ? '/' : route('login') }}" class="flex flex-col items-center text-sm hover:text-blue-400 transition">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
             </svg>

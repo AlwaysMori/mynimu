@@ -43,5 +43,5 @@ Route::middleware('auth')->group(function () {
 
 // Default route
 Route::get('/', function () {
-    return redirect('/login');
-});
+    return view('home.home'); // Pastikan ini adalah halaman yang benar
+})->name('home');
