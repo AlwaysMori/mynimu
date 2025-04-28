@@ -50,6 +50,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });
 
+// Route for anime shelf
+Route::get('/anime/shelf', function () {
+    return view('home.anime.shelf');
+})->name('anime.shelf');
+
+// Routes for shelf categories
+Route::get('/anime/shelf/wishlist', function () {
+    return view('home.anime.wishlist'); // Create this view for Wishlist
+})->name('anime.shelf.wishlist');
+
+Route::get('/anime/shelf/finished', function () {
+    return view('home.anime.finished'); // Create this view for Finished
+})->name('anime.shelf.finished');
+
+Route::get('/anime/shelf/favorite', function () {
+    return view('home.anime.favorite'); // Create this view for Favorite
+})->name('anime.shelf.favorite');
+
 // Default route
 Route::get('/', function () {
     return view('home.home'); // Pastikan ini adalah halaman yang benar

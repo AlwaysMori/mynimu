@@ -10,7 +10,7 @@
         <nav id="menu" class="md:flex space-x-4 hidden">
             <a href="/" class="hover:text-blue-400 transition">Home</a>
             <a href="/forum" class="hover:text-blue-400 transition">Forum</a>
-            <a href="/anime" class="hover:text-blue-400 transition">Anime</a>
+            <a href="/anime/shelf" class="hover:text-blue-400 transition">Anime</a>
             <a href="/profile" class="hover:text-blue-400 transition">Profile</a>
             @auth
             <form action="{{ route('logout') }}" method="POST" class="inline">

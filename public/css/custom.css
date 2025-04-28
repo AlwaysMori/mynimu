@@ -87,3 +87,12 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+.photo-card img {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.photo-card img:hover {
+    transform: scale(1.2); /* Slightly enlarge the icon on hover */
+    filter: brightness(1.2); /* Brighten the icon */
+}
