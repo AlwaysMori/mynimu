@@ -104,4 +104,20 @@ class AnimeController extends Controller
 
         return response()->json(['isBookmarked' => $isBookmarked]);
     }
+
+    public function toggleFavorite(Request $request, $id)
+    {
+        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark->update(['is_favorite' => !$bookmark->is_favorite]);
+
+        return response()->json(['message' => 'Favorite status toggled successfully', 'bookmark' => $bookmark]);
+    }
+
+    public function toggleFinished(Request $request, $id)
+    {
+        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark->update(['is_finished' => !$bookmark->is_finished]);
+
+        return response()->json(['message' => 'Finished status toggled successfully', 'bookmark' => $bookmark]);
+    }
 }

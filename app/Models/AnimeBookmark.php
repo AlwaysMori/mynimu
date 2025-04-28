@@ -14,6 +14,8 @@ class AnimeBookmark extends Model
         'title',
         'image_url',
         'status',
+        'is_finished',
+        'is_favorite',
     ];
 
     public function user()

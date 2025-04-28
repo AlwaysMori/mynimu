@@ -51,6 +51,49 @@
         <hr class="border-t-2 border-gray-600 mb-4">
         <div id="user-bookmarks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Bookmark user akan ditampilkan di sini -->
+            <script>
+                document.addEventListener('click', async (event) => {
+                    if (event.target.closest('.favorite-button')) {
+                        const button = event.target.closest('.favorite-button');
+                        const bookmarkId = button.getAttribute('data-bookmark-id');
+
+                        try {
+                            const response = await fetch(`/anime/bookmark/${bookmarkId}/favorite`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                            });
+
+                            const result = await response.json();
+                            alert(result.message);
+                        } catch (error) {
+                            console.error(error);
+                            alert('An error occurred while toggling favorite status.');
+                        }
+                    }
+
+                    if (event.target.closest('.finished-button')) {
+                        const button = event.target.closest('.finished-button');
+                        const bookmarkId = button.getAttribute('data-bookmark-id');
+
+                        try {
+                            const response = await fetch(`/anime/bookmark/${bookmarkId}/finished`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                            });
+
+                            const result = await response.json();
+                            alert(result.message);
+                        } catch (error) {
+                            console.error(error);
+                            alert('An error occurred while toggling finished status.');
+                        }
+                    }
+                });
+            </script>
         </div>
     </div>
 
@@ -81,12 +124,15 @@
 
                 recommendations.forEach(async anime => {
                     const response = await fetch(`/anime/bookmark-status/${anime.mal_id}`);
-                    const { isBookmarked } = await response.json();
+                    const { isBookmarked, is_finished } = await response.json();
 
                     const animeCard = document.createElement('div');
-                    animeCard.classList.add('photo-card', 'bg-gray-800', 'border', 'border-blue-800', 'p-6', 'fade-in', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
+                    animeCard.classList.add('photo-card', 'bg-gray-800', 'border', 'border-blue-800', 'p-6', 'fade-in', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'relative');
                     animeCard.innerHTML = `
                         <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded-none">
+                        <div class="absolute top-2 right-2">
+                            <img src="${is_finished ? 'https://img.icons8.com/?size=100&id=123575&format=png&color=FAB005' : 'https://img.icons8.com/?size=100&id=102698&format=png&color=FAB005'}" alt="${is_finished ? 'Finished' : 'Not Finished'}" class="w-6 h-6">
+                        </div>
                         <div class="flex-1 pl-4">
                             <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                             <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
@@ -125,12 +171,15 @@
 
                     results.forEach(async anime => {
                         const response = await fetch(`/anime/bookmark-status/${anime.mal_id}`);
-                        const { isBookmarked } = await response.json();
+                        const { isBookmarked, is_finished } = await response.json();
 
                         const animeCard = document.createElement('div');
-                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
+                        animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'relative');
                         animeCard.innerHTML = `
                             <img src="${anime.images.jpg.image_url}" alt="${anime.title}" class="w-32 h-32 object-cover rounded">
+                            <div class="absolute top-2 right-2">
+                                <img src="${is_finished ? 'https://img.icons8.com/?size=100&id=123575&format=png&color=FAB005' : 'https://img.icons8.com/?size=100&id=102698&format=png&color=FAB005'}" alt="${is_finished ? 'Finished' : 'Not Finished'}" class="w-6 h-6">
+                            </div>
                             <div class="flex-1 pl-4">
                                 <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                                 <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
@@ -212,12 +261,20 @@
 
                 bookmarks.forEach(bookmark => {
                     const bookmarkCard = document.createElement('div');
-                    bookmarkCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
+                    bookmarkCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex', 'relative');
                     bookmarkCard.innerHTML = `
                         <img src="${bookmark.image_url}" alt="${bookmark.title}" class="w-32 h-32 object-cover rounded">
+                        <div class="absolute top-2 right-2">
+                            <img src="${bookmark.is_finished ? 'https://img.icons8.com/?size=100&id=123575&format=png&color=FAB005' : 'https://img.icons8.com/?size=100&id=102698&format=png&color=FAB005'}" alt="${bookmark.is_finished ? 'Finished' : 'Not Finished'}" class="w-6 h-6">
+                        </div>
                         <div class="flex-1 pl-4">
                             <h3 class="text-xl font-bold text-white">${bookmark.title}</h3>
                             <p class="text-sm text-gray-400 mt-2">Status: ${bookmark.status}</p>
+                            <div class="mt-4 flex justify-between">
+                                <button class="p-2 favorite-button ${bookmark.is_favorite ? 'favorited' : ''}" data-bookmark-id="${bookmark.id}">
+                                    <img src="${bookmark.is_favorite ? 'https://img.icons8.com/?size=100&id=26083&format=png&color=40C057' : 'https://img.icons8.com/?size=100&id=25157&format=png&color=40C057'}" alt="${bookmark.is_favorite ? 'Favorited' : 'Add to Favorite'}" class="w-6 h-6">
+                                </button>
+                            </div>
                         </div>
                     `;
                     bookmarksContainer.appendChild(bookmarkCard);

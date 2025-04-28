@@ -19,6 +19,8 @@ Route::get('/search-anime', [AnimeController::class, 'searchAnime'])->name('sear
 // Route for managing anime bookmarks
 Route::post('/anime/bookmark', [AnimeController::class, 'addBookmark'])->name('anime.bookmark');
 Route::patch('/anime/bookmark/{id}', [AnimeController::class, 'updateBookmarkStatus'])->name('anime.updateBookmark');
+Route::patch('/anime/bookmark/{id}/favorite', [AnimeController::class, 'toggleFavorite'])->name('anime.toggleFavorite');
+Route::patch('/anime/bookmark/{id}/finished', [AnimeController::class, 'toggleFinished'])->name('anime.toggleFinished');
 
 // Route for random anime recommendation
 Route::get('/random-anime', [AnimeController::class, 'getRandomAnime'])->name('random-anime');
