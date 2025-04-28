@@ -140,7 +140,11 @@
                                 <button class="p-2 wishlist-button ${isBookmarked ? 'wishlisted' : ''}" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
                                     <img src="${isBookmarked ? 'https://img.icons8.com/?size=100&id=26083&format=png&color=40C057' : 'https://img.icons8.com/?size=100&id=25157&format=png&color=40C057'}" alt="${isBookmarked ? 'Already Bookmarked' : 'Add to Wishlist'}" class="w-6 h-6 love-icon">
                                 </button>
-                                <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
+                                <button 
+                                    class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" 
+                                    data-anime-id="${anime.mal_id}"
+                                    onclick="window.location.href='/anime/detail/${anime.mal_id}'"
+                                >
                                     Details
                                 </button>
                             </div>
@@ -187,7 +191,11 @@
                                     <button class="p-2 wishlist-button ${isBookmarked ? 'wishlisted' : ''}" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
                                         <img src="${isBookmarked ? 'https://img.icons8.com/?size=100&id=26083&format=png&color=40C057' : 'https://img.icons8.com/?size=100&id=25157&format=png&color=40C057'}" alt="${isBookmarked ? 'Already Bookmarked' : 'Add to Wishlist'}" class="w-6 h-6 love-icon">
                                     </button>
-                                    <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
+                                    <button 
+                                        class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" 
+                                        data-anime-id="${anime.mal_id}"
+                                        onclick="window.location.href='/anime/detail/${anime.mal_id}'"
+                                    >
                                         Details
                                     </button>
                                 </div>

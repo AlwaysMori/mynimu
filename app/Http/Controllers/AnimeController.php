@@ -120,4 +120,35 @@ class AnimeController extends Controller
 
         return response()->json(['message' => 'Finished status toggled successfully', 'bookmark' => $bookmark]);
     }
+
+    public function deleteBookmark($id)
+    {
+        $bookmark = AnimeBookmark::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $bookmark->delete();
+
+        return response()->json(['message' => 'Bookmark deleted successfully']);
+    }
+
+    public function showDetail($id)
+    {
+        try {
+            $response = Http::get("https://api.jikan.moe/v4/anime/{$id}");
+            if ($response->failed()) {
+                return abort(404, 'Anime not found');
+            }
+
+            $anime = $response->json()['data'];
+            $animeBookmark = AnimeBookmark::where('anime_id', $id)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if (!$animeBookmark) {
+                return view('home.detail.detail', compact('anime'))->with('animeBookmark', null);
+            }
+
+            return view('home.detail.detail', compact('anime', 'animeBookmark'));
+        } catch (\Exception $e) {
+            return abort(500, 'An error occurred while fetching anime details');
+        }
+    }
 }

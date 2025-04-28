@@ -21,12 +21,16 @@ Route::post('/anime/bookmark', [AnimeController::class, 'addBookmark'])->name('a
 Route::patch('/anime/bookmark/{id}', [AnimeController::class, 'updateBookmarkStatus'])->name('anime.updateBookmark');
 Route::patch('/anime/bookmark/{id}/favorite', [AnimeController::class, 'toggleFavorite'])->name('anime.toggleFavorite');
 Route::patch('/anime/bookmark/{id}/finished', [AnimeController::class, 'toggleFinished'])->name('anime.toggleFinished');
+Route::delete('/anime/bookmark/{id}', [AnimeController::class, 'deleteBookmark'])->name('anime.deleteBookmark');
 
 // Route for random anime recommendation
 Route::get('/random-anime', [AnimeController::class, 'getRandomAnime'])->name('random-anime');
 
 // Route to check if an anime is already bookmarked
 Route::get('/anime/bookmark-status/{anime_id}', [AnimeController::class, 'checkBookmarkStatus'])->name('anime.bookmarkStatus');
+
+// Route for anime detail page
+Route::get('/anime/detail/{id}', [AnimeController::class, 'showDetail'])->name('anime.detail');
 
 // Protected routes (requires authentication)
 Route::middleware('auth')->group(function () {

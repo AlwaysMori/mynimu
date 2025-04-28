@@ -16,7 +16,7 @@ class CreateAnimeBookmarksTable extends Migration
             $table->string('image_url');
             $table->boolean('is_finished')->default(false);
             $table->boolean('is_favorite')->default(false);
-            $table->enum('status', ['wishlist'])->default('wishlist');
+$table->enum('status', ['wishlist'])->default('wishlist');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
