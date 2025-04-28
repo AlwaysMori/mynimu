@@ -41,6 +41,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/anime/bookmarks', [AnimeController::class, 'getUserBookmarks'])->name('anime.userBookmarks');
 });
 
+// Profile routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', function () {
+        return view('home.profile.profile');
+    })->name('profile');
+
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
 // Default route
 Route::get('/', function () {
     return view('home.home'); // Pastikan ini adalah halaman yang benar
