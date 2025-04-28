@@ -23,6 +23,9 @@ Route::patch('/anime/bookmark/{id}', [AnimeController::class, 'updateBookmarkSta
 // Route for random anime recommendation
 Route::get('/random-anime', [AnimeController::class, 'getRandomAnime'])->name('random-anime');
 
+// Route to check if an anime is already bookmarked
+Route::get('/anime/bookmark-status/{anime_id}', [AnimeController::class, 'checkBookmarkStatus'])->name('anime.bookmarkStatus');
+
 // Protected routes (requires authentication)
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {

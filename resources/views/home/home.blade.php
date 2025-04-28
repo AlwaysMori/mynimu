@@ -79,7 +79,10 @@
 
                 const recommendations = await response.json();
 
-                recommendations.forEach(anime => {
+                recommendations.forEach(async anime => {
+                    const response = await fetch(`/anime/bookmark-status/${anime.mal_id}`);
+                    const { isBookmarked } = await response.json();
+
                     const animeCard = document.createElement('div');
                     animeCard.classList.add('photo-card', 'bg-gray-800', 'border', 'border-blue-800', 'p-6', 'fade-in', 'rounded-none', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
                     animeCard.innerHTML = `
@@ -88,8 +91,8 @@
                             <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                             <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
                             <div class="mt-4 flex justify-between">
-                                <button class="p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
-                                    <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                                <button class="p-2 wishlist-button ${isBookmarked ? 'wishlisted' : ''}" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                                    <img src="${isBookmarked ? 'https://img.icons8.com/?size=100&id=26083&format=png&color=40C057' : 'https://img.icons8.com/?size=100&id=25157&format=png&color=40C057'}" alt="${isBookmarked ? 'Already Bookmarked' : 'Add to Wishlist'}" class="w-6 h-6 love-icon">
                                 </button>
                                 <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
                                     Details
@@ -120,7 +123,10 @@
                     const results = await response.json();
                     resultsContainer.innerHTML = ''; // Bersihkan hasil sebelumnya
 
-                    results.forEach(anime => {
+                    results.forEach(async anime => {
+                        const response = await fetch(`/anime/bookmark-status/${anime.mal_id}`);
+                        const { isBookmarked } = await response.json();
+
                         const animeCard = document.createElement('div');
                         animeCard.classList.add('photo-card', 'bg-gray-800', 'p-6', 'border', 'border-blue-800', 'fade-in', 'rounded', 'solid-shadow', 'hover:shadow-lg', 'transition', 'flex');
                         animeCard.innerHTML = `
@@ -129,8 +135,8 @@
                                 <h3 class="text-xl font-bold text-white">${anime.title}</h3>
                                 <p class="text-sm text-gray-400 mt-2">Rating: ${anime.score ?? 'N/A'}</p>
                                 <div class="mt-4 flex justify-between">
-                                    <button class="p-2 wishlist-button" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
-                                        <img src="https://img.icons8.com/?size=100&id=25157&format=png&color=40C057" alt="Add to Wishlist" class="w-6 h-6 love-icon">
+                                    <button class="p-2 wishlist-button ${isBookmarked ? 'wishlisted' : ''}" data-anime-id="${anime.mal_id}" data-title="${anime.title}" data-image-url="${anime.images.jpg.image_url}">
+                                        <img src="${isBookmarked ? 'https://img.icons8.com/?size=100&id=26083&format=png&color=40C057' : 'https://img.icons8.com/?size=100&id=25157&format=png&color=40C057'}" alt="${isBookmarked ? 'Already Bookmarked' : 'Add to Wishlist'}" class="w-6 h-6 love-icon">
                                     </button>
                                     <button class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition details-button" data-anime-id="${anime.mal_id}">
                                         Details
@@ -157,28 +163,27 @@
                     const title = button.getAttribute('data-title');
                     const imageUrl = button.getAttribute('data-image-url');
                     const loveIcon = button.querySelector('.love-icon');
-                    const isWishlisted = loveIcon.classList.contains('wishlisted');
 
                     try {
-                        if (isWishlisted) {
-                            // Remove from wishlist (optional: implement backend logic)
-                            loveIcon.classList.remove('wishlisted');
-                            loveIcon.src = "https://img.icons8.com/?size=100&id=25157&format=png&color=40C057";
-                        } else {
-                            // Add to wishlist
-                            const response = await fetch('/anime/bookmark', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                },
-                                body: JSON.stringify({ anime_id: animeId, title: title, image_url: imageUrl }),
-                            });
+                        // Kirim permintaan ke backend untuk menambahkan bookmark
+                        const response = await fetch('/anime/bookmark', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
+                            body: JSON.stringify({ anime_id: animeId, title: title, image_url: imageUrl }),
+                        });
 
-                            if (!response.ok) {
-                                throw new Error('Failed to add to wishlist');
-                            }
+                        const result = await response.json();
 
+                        if (result.status === 'exists') {
+                            alert(`${title} is already in your bookmarks.`);
+                            return; // Jangan lakukan apa-apa jika sudah dibookmark
+                        }
+
+                        if (result.status === 'success') {
+                            // Ubah status tombol menjadi "wishlisted"
                             loveIcon.classList.add('wishlisted');
                             loveIcon.src = "https://img.icons8.com/?size=100&id=26083&format=png&color=40C057"; // Change to green icon
 

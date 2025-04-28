@@ -31,20 +31,31 @@ class AnimeController extends Controller
 
     public function addBookmark(Request $request)
     {
-        $request->validate([
-            'anime_id' => 'required|string',
-            'title' => 'required|string',
-            'image_url' => 'required|url',
+        $user = auth()->user();
+        $animeId = $request->input('anime_id');
+
+        // Periksa apakah anime sudah dibookmark
+        $existingBookmark = $user->animeBookmarks()->where('anime_id', $animeId)->first();
+
+        if ($existingBookmark) {
+            return response()->json([
+                'message' => 'Anime is already bookmarked.',
+                'status' => 'exists',
+            ], 200);
+        }
+
+        // Simpan bookmark baru
+        $user->animeBookmarks()->create([
+            'anime_id' => $animeId,
+            'title' => $request->input('title'),
+            'image_url' => $request->input('image_url'),
+            'status' => 'wishlist',
         ]);
 
-        $bookmark = AnimeBookmark::create([
-            'user_id' => Auth::id(),
-            'anime_id' => $request->anime_id,
-            'title' => $request->title,
-            'image_url' => $request->image_url,
-        ]);
-
-        return response()->json(['message' => 'Bookmark added successfully', 'bookmark' => $bookmark], 201);
+        return response()->json([
+            'message' => 'Anime added to bookmarks.',
+            'status' => 'success',
+        ], 201);
     }
 
     public function updateBookmarkStatus(Request $request, $id)
@@ -84,5 +95,13 @@ class AnimeController extends Controller
         $bookmarks = AnimeBookmark::where('user_id', Auth::id())->get();
 
         return response()->json(['bookmarks' => $bookmarks]);
+    }
+
+    public function checkBookmarkStatus($anime_id)
+    {
+        $user = auth()->user();
+        $isBookmarked = $user->animeBookmarks()->where('anime_id', $anime_id)->exists();
+
+        return response()->json(['isBookmarked' => $isBookmarked]);
     }
 }

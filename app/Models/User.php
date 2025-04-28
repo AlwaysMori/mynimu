@@ -39,4 +39,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function animeBookmarks()
+    {
+        return $this->hasMany(AnimeBookmark::class);
+    }
 }
