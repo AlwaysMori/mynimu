@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AnimeController;
-
+use App\Http\Controllers\ShelfController;
 // Authentication routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         return view('home.profile.profile');
     })->name('profile');
 
-    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile', [AppileController::class, 'update'])->name('profile.update');
 });
 
 // Route for anime shelf
@@ -55,20 +55,14 @@ Route::get('/anime/shelf', function () {
     return view('home.anime.shelf');
 })->name('anime.shelf');
 
-// Routes for shelf categories
-Route::get('/anime/shelf/wishlist', function () {
-    return view('home.anime.wishlist'); // Create this view for Wishlist
-})->name('anime.shelf.wishlist');
-
-Route::get('/anime/shelf/finished', function () {
-    return view('home.anime.finished'); // Create this view for Finished
-})->name('anime.shelf.finished');
-
-Route::get('/anime/shelf/favorite', function () {
-    return view('home.anime.favorite'); // Create this view for Favorite
-})->name('anime.shelf.favorite');
+// Routes for shelf categories (wishlist, finished, favorite) - gunakan controller
+Route::middleware('auth')->group(function () {
+    Route::get('/anime/shelf/wishlist', [ShelfController::class, 'wishlist'])->name('anime.shelf.wishlist');
+    Route::get('/anime/shelf/finished', [ShelfController::class, 'finished'])->name('anime.shelf.finished');
+    Route::get('/anime/shelf/favorite', [ShelfController::class, 'favorite'])->name('anime.shelf.favorite');
+});
 
 // Default route
-Route::get('/', function () {
+Route::middleware('auth')->get('/', function () {
     return view('home.home'); // Pastikan ini adalah halaman yang benar
 })->name('home');

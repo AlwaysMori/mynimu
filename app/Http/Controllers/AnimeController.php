@@ -117,7 +117,8 @@ class AnimeController extends Controller
             ]
         );
 
-        $bookmark->update(['is_favorite' => !$bookmark->is_favorite]);
+        // Toggle dengan integer 1/0
+        $bookmark->update(['is_favorite' => $bookmark->is_favorite ? 0 : 1]);
 
         return response()->json(['message' => 'Favorite status toggled successfully', 'bookmark' => $bookmark]);
     }

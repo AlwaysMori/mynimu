@@ -18,6 +18,11 @@ class AnimeBookmark extends Model
         'is_favorite',
     ];
 
+    protected $casts = [
+        'is_favorite' => 'boolean',
+        'is_finished' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
